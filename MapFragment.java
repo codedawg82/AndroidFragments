@@ -1,5 +1,6 @@
 package com.tomra.stores;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,10 +31,15 @@ public class MapFragment extends SherlockMapFragment {
 	double mLng = -73.128605;
 	
     private GoogleMap mMap;
-    private Context mContext;
     
     public MapFragment() {
     	Log.d(TAG, "MapFragment constructor called...");
+    }
+    
+    public static MapFragment newInstance(){ 
+    	MapFragment f = new MapFragment();
+    	
+    	return f;
     }
 
     @Override
@@ -42,15 +48,19 @@ public class MapFragment extends SherlockMapFragment {
         Log.d(TAG, "onCreate()");
     	
     	setRetainInstance(true);
-
+    }
+    
+    @Override
+    public void onAttach(Activity activity){
+    	super.onAttach(activity);
+    	
     	try {
     		MapsInitializer.initialize(this.getActivity());
 
     	} catch (GooglePlayServicesNotAvailableException e){ 
     		e.printStackTrace();
     	}
-    	
-        mMap = getMap();
+
     }
     
     @Override
@@ -70,10 +80,15 @@ public class MapFragment extends SherlockMapFragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	Log.v(TAG, "onCreateView()");
         View root = super.onCreateView(inflater, container, savedInstanceState);
-
-        return inflater.inflate(R.layout.main, null, false);
-//        return root;
+    	
+        mMap = getMap();
+        if(mMap == null){
+        	Log.v(TAG, "Map not available yet...");
+        }
+//        return inflater.inflate(R.layout.main, null, false);
+        return root;
     }
     
     @Override
@@ -129,8 +144,6 @@ public class MapFragment extends SherlockMapFragment {
     	}
 
     }
-    
- 
     
 //    public void initMap(LatLng position){
 //    	UiSettings settings = getMap().getUiSettings();

@@ -57,7 +57,7 @@ public class SimpleListFragment extends ListFragment {
     super.onActivityCreated(savedInstanceState);
 
     getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    setContents(getArguments().getStringArrayList(KEY_CONTENTS));
+//    setContents(getArguments().getStringArrayList(KEY_CONTENTS));
   }
 
   @Override

@@ -3,4 +3,17 @@
     android:id="@+id/content_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+    
+    <fragment
+        class="com.tomra.stores.SimpleListFragment"
+        android:id="@+id/sample_list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"/>
+    
+    <fragment
+        class="com.tomra.stores.MapFragment"
+        android:id="@+id/store_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </FrameLayout>

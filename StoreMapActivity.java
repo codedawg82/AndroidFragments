@@ -1,12 +1,13 @@
 package com.tomra.stores;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.MenuItem;
@@ -36,6 +37,8 @@ public class StoreMapActivity extends SlidingFragmentActivity
 			, "Empire State Building, New York, NY"
 			, "Soldier Field, Chicago, IL"
 	};
+	
+	private static final ArrayList<String> items_list = new ArrayList();
 
 	@Override
 	public void onCreate(Bundle bundle){
@@ -46,11 +49,15 @@ public class StoreMapActivity extends SlidingFragmentActivity
 		setTitle("MAP ACTIVITY");
 		
 		setContentView(R.layout.responsive_content_frame);
+		
+		for(String s : items){
+			items_list.add(s);
+		}
 
 		if(findViewById(R.id.menu_frame) == null){
 			setBehindContentView(R.layout.menu_frame);
 			getSlidingMenu().setSlidingEnabled(true);
-			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 			// show home as up so we can toggle
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		} else {
@@ -58,7 +65,7 @@ public class StoreMapActivity extends SlidingFragmentActivity
 			View v = new View(this);
 			setBehindContentView(v);
 			getSlidingMenu().setSlidingEnabled(false);
-			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		}
 		
 //		// set the Store List View Fragment
@@ -145,9 +152,10 @@ public class StoreMapActivity extends SlidingFragmentActivity
 //				ft.show(mMapFragment);
 			} else {
 				Log.d(TAG, "Setting up Small Map Layout");
-				mMapFragment = (MapFragment) new MapFragment();
+//				mMapFragment = MapFragment.newInstance();
+//				ft.add(R.id.store_map, mMapFragment, MapFragment.TAG);
 //				ft.add(R.id.content_frame, mMapFragment, MapFragment.TAG);
-//				ft.add(R.id.content_frame, mMapFragment, MapFragment.TAG);
+				mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.store_map);
 				ft.hide(mMapFragment);
 			}
 		}
@@ -155,10 +163,13 @@ public class StoreMapActivity extends SlidingFragmentActivity
 		mSimpleListFragment = (SimpleListFragment) getSupportFragmentManager().findFragmentByTag(SimpleListFragment.TAG);
 //		mSimpleListFragment = (StoreListFragment) getSupportFragmentManager().findFragmentByTag(StoreListFragment.TAG);
 		if(mSimpleListFragment == null){
-			mSimpleListFragment = new SimpleListFragment().newInstance(items, this);
+//			mSimpleListFragment = new SimpleListFragment().newInstance(items, this);
+//			mSimpleListFragment.
+			mSimpleListFragment = (SimpleListFragment) getSupportFragmentManager().findFragmentById(R.id.sample_list);
+			mSimpleListFragment.setContents(items_list);
 //			ft.add(R.id.content_frame, mSimpleListFragment, SimpleListFragment.TAG);
 //			mSimpleListFragment = new StoreListFragment();
-			ft.replace(R.id.content_frame, mSimpleListFragment, StoreListFragment.TAG);
+//			ft.replace(R.id.content_frame, mSimpleListFragment, StoreListFragment.TAG);
 //			ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.slide_out_right);
 		}
 		ft.show(mSimpleListFragment);
@@ -268,20 +279,12 @@ public class StoreMapActivity extends SlidingFragmentActivity
 				ft.addToBackStack(null);
 			}
 			
-//			ft.show(mMapFragment);
-//			ft.commit();
-//			mMapFragment.animateTo(lat, lon, true);
-			
-			ft.replace(R.id.content_frame, mMapFragment, MapFragment.TAG);
-			ft.addToBackStack(null);
-			ft.commit();
+//			ft.replace(R.id.content_frame, mMapFragment, MapFragment.TAG);
+			ft.show(mMapFragment);
+			ft.commit();			
 			
 			mMapFragment.animateTo(lat, lon, true);
 			
-//			ft.replace(R.id.content_frame, mMapFragment);
-//			ft.addToBackStack(null);
-//			ft.commit();
-
 		}
 	}
 
